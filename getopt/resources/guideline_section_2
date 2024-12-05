@@ -1,0 +1,110 @@
+### **Section 2: Program Robustness and Error Handling**  
+**Guidelines**: 4, 5, 6, 7, 8, 25, 30  
+**Theme**: Ensuring the program handles input, errors, and edge cases gracefully.  
+
+---
+
+#### **Introduction**  
+Robust programs don’t crash or behave unpredictably. These guidelines help ensure proper error handling, argument parsing, resource cleanup, and defensive programming practices like handling all switch cases and implementing signal handlers.  
+
+---
+
+#### **Examples**  
+
+1. **Error Checking with `getopt`**  
+   ```c  
+   #include <stdio.h>  
+   #include <unistd.h>  
+
+   int main(int argc, char *argv[]) {  
+       int opt;  
+       while ((opt = getopt(argc, argv, "ab:")) != -1) {  
+           switch (opt) {  
+               case 'a':  
+                   printf("Option a selected\n");  
+                   break;  
+               case 'b':  
+                   printf("Option b with argument %s\n", optarg);  
+                   break;  
+               default:  
+                   fprintf(stderr, "Usage: %s [-a] [-b arg]\n", argv[0]);  
+                   return EXIT_FAILURE;  
+           }  
+       }  
+       return EXIT_SUCCESS;  
+   }  
+   ```  
+
+2. **Defensive Programming with `assert`**  
+   ```c  
+   #include <assert.h>  
+
+   void process_value(int value) {  
+       assert(value >= 0); // Ensure value is non-negative  
+       printf("Processing %d\n", value);  
+   }  
+   ```  
+
+3. **Signal Handling**  
+   ```c  
+   #include <signal.h>  
+   #include <stdio.h>  
+
+   void handle_signal(int sig) {  
+       printf("Received signal %d\n", sig);  
+   }  
+
+   int main() {  
+       signal(SIGINT, handle_signal);  
+       while (1);  
+       return 0;  
+   }  
+   ```  
+
+---
+
+#### **Practical Problem**  
+
+1. **Problem Statement**:  
+   - Write a program that:  
+     - Parses arguments for options `-n` and `-f <filename>`.  
+     - If an invalid argument is provided, displays a usage message and exits with an error code.  
+     - Handles the `SIGTERM` signal to cleanly terminate.  
+
+2. **Solution**:  
+   ```c  
+   #include <stdio.h>  
+   #include <stdlib.h>  
+   #include <unistd.h>  
+   #include <signal.h>  
+
+   void handle_sigterm(int sig) {  
+       printf("Terminating program gracefully.\n");  
+       exit(EXIT_SUCCESS);  
+   }  
+
+   int main(int argc, char *argv[]) {  
+       int opt;  
+       signal(SIGTERM, handle_sigterm);  
+
+       while ((opt = getopt(argc, argv, "n:f:")) != -1) {  
+           switch (opt) {  
+               case 'n':  
+                   printf("Option n selected\n");  
+                   break;  
+               case 'f':  
+                   printf("Filename: %s\n", optarg);  
+                   break;  
+               default:  
+                   fprintf(stderr, "Usage: %s [-n] [-f filename]\n", argv[0]);  
+                   return EXIT_FAILURE;  
+           }  
+       }  
+
+       printf("Program running...\n");  
+       while (1);  
+       return EXIT_SUCCESS;  
+   }  
+   ```  
+
+---

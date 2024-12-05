@@ -1,0 +1,13 @@
+all: client
+
+client:
+	gcc client.o server.o -o client
+
+clien.o:
+	gcc -std=c99 -pedantic -Wall -c client.c
+
+server.o:
+	gcc -std=c99 -pedantic -Wall -c server.c
+
+clean:
+	rm client client.o server.o
