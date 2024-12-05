@@ -7,3 +7,4 @@
 6. Modify the makefile to compile `getopt_02.c`
 7. Compile `getopt_02.c`
 8. Play around with the test cases
+9. Go back to instruction `8` of [getopt](https://github.com/Berthran/C_Lessons/blob/main/getopt/README.md)
